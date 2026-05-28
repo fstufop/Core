@@ -2,6 +2,7 @@ import Foundation
 
 public enum HTTPError: Error {
     case downloadImageError
+    case expiredCredentials
     case noData
     case invalidURL
     case invalidCredentials
@@ -31,6 +32,8 @@ public enum HTTPError: Error {
             return "Estamos tendo problemas com a conexão."
         case .invalidCredentials:
             return "Credenciais inválidas"
+        case .expiredCredentials:
+            return "Credenciais expiradas"
         case .unauthorized:
             return "Autenticação inválida"
         }

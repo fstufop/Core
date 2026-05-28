@@ -14,6 +14,9 @@ struct ErrorResponseBuilder {
         case 401:
             NotificationCenter.default.post(name: Notification.Name("SessionExpired"), object: nil)
             throw HTTPError.unauthorized
+        case 403:
+            NotificationCenter.default.post(name: Notification.Name("ExpiredCredentials"), object: nil)
+            throw HTTPError.expiredCredentials
         case 422:
             throw HTTPError.invalidCredentials
         case 500...504:
