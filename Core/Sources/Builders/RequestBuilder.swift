@@ -26,12 +26,17 @@ enum RequestBuilder {
         request.allHTTPHeaderFields = headers
         request.httpMethod = service.method.rawValue
         
-        if let body = service.body,
-           service.method != .get {
-            let encoder = try JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
-            request.httpBody = encoder
+        if let body = service.body, service.method != .get {
+            let encoder = JSONEncoder()
+            request.httpBody = try encoder.encode(AnyEncodable(body))
         }
         
         return request
     }
+}
+
+private struct AnyEncodable: Encodable {
+    private let _encode: (Encoder) throws -> Void
+    init(_ encodable: any Encodable) { self._encode = encodable.encode }
+    func encode(to encoder: Encoder) throws { try _encode(encoder) }
 }

@@ -1,25 +1,19 @@
-import SystemConfiguration
+import Network
 
-class ConnectionCheck {
+final class ConnectionCheck {
+    private static let shared = ConnectionCheck()
+
+    private let monitor = NWPathMonitor()
+    private var currentStatus: NWPath.Status = .requiresConnection
+
+    private init() {
+        monitor.pathUpdateHandler = { [weak self] path in
+            self?.currentStatus = path.status
+        }
+        monitor.start(queue: DispatchQueue(label: "com.core.network-monitor"))
+    }
+
     static func isConnectedToNetwork() -> Bool {
-        var zeroAddress = sockaddr_in()
-        zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
-        zeroAddress.sin_family = sa_family_t(AF_INET)
-        
-        let defaultRouteReachability = withUnsafePointer(to: &zeroAddress) {
-            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {zeroSockAddress in
-                SCNetworkReachabilityCreateWithAddress(nil, zeroSockAddress)
-            }
-        }
-        
-        var flags: SCNetworkReachabilityFlags = SCNetworkReachabilityFlags(rawValue: 0)
-        if SCNetworkReachabilityGetFlags(defaultRouteReachability!, &flags) == false {
-            return false
-        }
-        
-        let isReachable = (flags.rawValue & UInt32(kSCNetworkFlagsReachable)) != 0
-        let needsConnection = (flags.rawValue & UInt32(kSCNetworkFlagsConnectionRequired)) != 0
-        
-        return (isReachable && !needsConnection)
+        return shared.currentStatus == .satisfied
     }
 }

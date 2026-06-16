@@ -1,6 +1,6 @@
 import Foundation
 
-public enum HTTPError: Error {
+public enum HTTPError: Error, LocalizedError {
     case downloadImageError
     case expiredCredentials
     case noData
@@ -16,7 +16,7 @@ public enum HTTPError: Error {
     case requestFormDataError
     case requestError(_ error: Error)
 
-    var localizedDescription: String {
+    public var errorDescription: String? {
         switch self {
         case .downloadImageError:
             return "Error ao baixar a imagem."

@@ -7,17 +7,18 @@ final class PrintBuilder {
         data: Data?,
         printBody: Bool = true
     ) {
+        #if DEBUG
         debugPrint("===================== REQUEST =====================")
         debugPrint("===> URL: \(request.url?.absoluteString ?? "")")
         debugPrint("===> METHOD: \(request.httpMethod ?? "")")
         debugPrint("===> HEADERS: \(String(describing: request.allHTTPHeaderFields ?? [:]))")
-        
+
         if printBody,
            let bodyData = request.httpBody,
            let requestBody = String(data: bodyData, encoding: .utf8) {
             debugPrint("===> Requested BODY: \(requestBody)")
         }
-        
+
         if let response = response {
             debugPrint("=========> STATUSCODE: \(response.statusCode)")
         }
@@ -27,9 +28,8 @@ final class PrintBuilder {
             return
         }
         debugPrint("===> RESPONSE")
-        
-        let decode = String(data: data, encoding: .utf8)
-        debugPrint(decode ?? "")
+        debugPrint(String(data: data, encoding: .utf8) ?? "")
         debugPrint("====================================================")
+        #endif
     }
 }

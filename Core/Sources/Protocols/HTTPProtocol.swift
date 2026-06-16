@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 public protocol HTTPProtocol {
     func request<Model: Decodable>(
@@ -7,7 +7,7 @@ public protocol HTTPProtocol {
         decoder: JSONDecoder,
         completion: @escaping (Result<Model, HTTPError>) -> Void
     )
-    
+
     func multipartRequest<Model: Decodable>(
         service: RequestType,
         with model: Model.Type,
@@ -15,16 +15,16 @@ public protocol HTTPProtocol {
         decoder: JSONDecoder,
         completion: @escaping (Result<Model?, HTTPError>) -> Void
     )
-    
+
     func downloadImage(
         from urlString: String,
-        completion: @escaping (Result<UIImage?, HTTPError>) -> Void
+        completion: @escaping (Result<Data, HTTPError>) -> Void
     )
-    
+
     func downloadData(
         service: RequestType,
         completion: @escaping (Result<Data, HTTPError>) -> Void
     )
-    
+
     func cancel(completion: (() -> Void)?)
 }

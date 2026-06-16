@@ -22,9 +22,9 @@ struct MultipartFormDataRequest {
         if let token = service.token {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
-        request.allHTTPHeaderFields?.merge(service.customHeaders) { current, _ in
-            current
-        }
+        var allHeaders = request.allHTTPHeaderFields ?? [:]
+        allHeaders.merge(service.customHeaders) { current, _ in current }
+        request.allHTTPHeaderFields = allHeaders
 
         request.httpBody = body.asData()
 
