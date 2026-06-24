@@ -20,7 +20,8 @@ struct MultipartFormDataRequest {
 
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         if let token = service.token {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            let authValue = service.tokenPrefix.map { "\($0) \(token)" } ?? token
+            request.setValue(authValue, forHTTPHeaderField: "Authorization")
         }
         request.allHTTPHeaderFields?.merge(service.customHeaders) { current, _ in
             current
