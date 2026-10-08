@@ -10,4 +10,11 @@ public protocol RequestType {
     var body: [String: Any]? { get }
     var queryParams: [String: String]? { get }
     var token: String? { get }
+    /// Prefix added before the token in the Authorization header (e.g. "Bearer").
+    /// Set to nil to send the token without any prefix.
+    var tokenPrefix: String? { get }
+}
+
+public extension RequestType {
+    var tokenPrefix: String? { "Bearer" }
 }

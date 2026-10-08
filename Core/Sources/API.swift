@@ -49,6 +49,9 @@ public class API: HTTPProtocol {
                 
                 completion(.success(object))
                 PrintBuilder.prettyPrint(request: urlRequest, response: response, data: data)
+            } catch let httpError as HTTPError {
+                completion(.failure(httpError))
+                PrintBuilder.prettyPrint(request: urlRequest, response: response, data: data)
             } catch {
                 completion(.failure(.requestError(error)))
                 PrintBuilder.prettyPrint(request: urlRequest, response: response, data: data)
@@ -85,10 +88,12 @@ public class API: HTTPProtocol {
                     let object = try HTTPDecodeBuilder.build(from: responseData, objectType: Model.self, decoder: decoder)
                     
                     completion(.success(object))
+                } catch let httpError as HTTPError {
+                    completion(.failure(httpError))
                 } catch {
                     completion(.failure(.requestError(error)))
                 }
-                
+
                 PrintBuilder.prettyPrint(
                     request: request,
                     response: response,

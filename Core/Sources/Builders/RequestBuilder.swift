@@ -14,7 +14,7 @@ enum RequestBuilder {
             }
         }
         
-        var headers = HeaderBuilder.basic(token: service.token).build()
+        var headers = HeaderBuilder.basic(token: service.token, tokenPrefix: service.tokenPrefix).build()
         headers.merge(service.customHeaders) { current, _ in current }
         
         guard let urlString = components.url?.absoluteString.removingPercentEncoding,
