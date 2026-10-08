@@ -39,6 +39,10 @@ struct MultipartFormDataRequest {
         components.path = service.path
         components.port = service.port
 
+        if let params = service.queryParams {
+            components.queryItems = params.map { URLQueryItem(name: $0.key, value: $0.value) }
+        }
+
         guard let url = NSString(string: components.url?.absoluteString ?? "").removingPercentEncoding else {
             return nil
         }
