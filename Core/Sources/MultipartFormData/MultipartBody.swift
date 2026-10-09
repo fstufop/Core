@@ -9,7 +9,7 @@ enum MultipartBoundary {
 }
 
 public enum MimeType: String {
-    case pdf = "application/json"
+    case pdf = "application/pdf"
     case jpeg = "image/jpeg"
     case png = "image/png"
 }
@@ -59,7 +59,7 @@ public struct MultipartBody: MultipartBodyProtocol {
     }
 
     public func asData() -> Data {
-        httpBody.appendString("--\(boundary)--")
+        httpBody.appendString("--\(boundary)--\r\n")
         return httpBody as Data
     }
 }
