@@ -16,7 +16,7 @@ public enum HTTPError: Error {
     case requestFormDataError
     case requestError(_ error: Error)
 
-    var localizedDescription: String {
+    public var localizedDescription: String {
         switch self {
         case .downloadImageError:
             return "Error ao baixar a imagem."
