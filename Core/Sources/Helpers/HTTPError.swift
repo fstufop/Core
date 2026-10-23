@@ -1,6 +1,6 @@
 import Foundation
 
-public enum HTTPError: Error {
+public enum HTTPError: LocalizedError {
     case downloadImageError
     case expiredCredentials
     case noData
@@ -20,8 +20,10 @@ public enum HTTPError: Error {
         switch self {
         case .downloadImageError:
             return "Error ao baixar a imagem."
-        case .noData, .invalidURL, .unknown, .statusCode, .requestError, .requestFormDataError:
+        case .noData, .invalidURL, .unknown, .requestError, .requestFormDataError:
             return "Não conseguimos realizar a sua solicitação."
+        case .statusCode(_, let object):
+            return (object as? [String: Any])?["message"] as? String ?? "Não conseguimos realizar a sua solicitação."
         case .invalidImageURL:
             return "A URL da imagem é inválida."
         case .serverError:
@@ -38,4 +40,6 @@ public enum HTTPError: Error {
             return "Autenticação inválida"
         }
     }
+
+    public var errorDescription: String? { localizedDescription }
 }
